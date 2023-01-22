@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useEffect,useMemo,useCallback } from 'react';
+import { useEffect,useMemo,useCallback,useRef } from 'react';
 import {Chess} from 'chess.js';
 import { chessBoardStyles } from './style';
 
@@ -23,14 +23,8 @@ const ChessBoard = (pgn) => {
   const [position, setPosition] = useState("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
   const [moves,setMoves] = useState([])
   const [currentMoveIndex,setCurrentMoveIndex] = useState(0);
-  const [evaluation,setEvaluation] = useState(0);
-
-  // const playGame = async () => {
-  //   while (currentMoveIndex < moves.length - 1) {
-  //     await onNext();
-  //     await new Promise(resolve => setTimeout(resolve, 2000));
-  //   }
-  // }
+  const eval2 = useRef(0);
+  const stopGame = useRef(false);
 
   const  getEvaluation2 = useCallback((fen) => {
     return new Promise((resolve) => {
@@ -80,41 +74,48 @@ const ChessBoard = (pgn) => {
   function loadMoves(pgnText){
     const chess = new Chess();
     chess.loadPgn(pgnText);
-    setMoves(chess.history({verbose:true}));
+    return chess.history({verbose:true})
   }
 
+
   const playGame = useCallback(async() => {
-    for(let i = 0; i < moves.length; i++) {
+    const tempMoves = loadMoves(pgn.pgn);
+    setMoves(tempMoves);
+    for(let i = 0; i < tempMoves.length; i++) {
       setCurrentMoveIndex(i);
-      setPosition(moves[i].fen);
-      setEvaluation(await getEvaluation2(moves[i].fen));
+      setPosition(tempMoves[i].fen);
+      const newEvaluation = await getEvaluation2(tempMoves[i].fen);
+      console.log(pgn.tresholdValue);
+      if((eval2.current - newEvaluation) > pgn.tresholdValue || stopGame.current)  break;
+      
+      eval2.current = newEvaluation;
       await new Promise(resolve => setTimeout(resolve, 1000));
     }
-  }, [moves, setCurrentMoveIndex, setPosition, setEvaluation, getEvaluation2])
+  }, [pgn, getEvaluation2,stopGame])
 
   useEffect(() => {
-    
     if(pgn.pgn){
-        loadMoves(pgn.pgn);
-        //playGame()
+        playGame()
     }
   }, [pgn, playGame]);
 
   const onNext = async () =>{
     setCurrentMoveIndex(currentMoveIndex + 1);
     setPosition(moves[currentMoveIndex].fen);
-    setEvaluation(await getEvaluation2(moves[currentMoveIndex].fen) );
+    eval2.current = await getEvaluation2(moves[currentMoveIndex].fen);
   }
 
   const onPrevious = async () =>{
     setCurrentMoveIndex(currentMoveIndex - 1);
     setPosition(moves[currentMoveIndex].fen);
-    setEvaluation(await getEvaluation2(moves[currentMoveIndex].fen) );
+    eval2.current = await getEvaluation2(moves[currentMoveIndex].fen);
   }
+
+  const onStop = () => stopGame.current = true;
 
     function formatEvaluation(evaluationString) {
         const regex = /(-?\d+(\.\d+)?)/;
-        return `Evaluations : ${parseFloat(evaluationString.match(regex)[0])}`;
+        return parseFloat(evaluationString.match(regex)[0]);
     }
 
   return (
@@ -140,15 +141,19 @@ const ChessBoard = (pgn) => {
         </tbody>
         )}
         <div>
-          {evaluation}
+          Evaluation : {eval2.current}
         </div>
       </table>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center',paddingRight:'0.8vw' }}>
+        
           <div style={{paddingRight:'0.3vw'}}>
             <button onClick={onNext}> Next</button>
           </div>
           <div style={{paddingLeft:'0.3vw'}}>
             <button onClick={onPrevious}> Previous</button>
+          </div>
+          <div style={{paddingRight:'0.3vw',paddingLeft:'20px'}}>
+            <button onClick={onStop}> Stop</button>
           </div>
         </div>
     </div>
