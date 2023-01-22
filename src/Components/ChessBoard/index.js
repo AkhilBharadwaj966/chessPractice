@@ -171,8 +171,8 @@ const Square = ({ i, j,piece }) => {
       for (let j = 0; j < 8; j++) {
         squareStyles[i][j] = { backgroundColor: (i + j) % 2 === 0 ? 'white' : 'green',
         color: (i + j) % 2 !== 0 ? 'white' : 'black',
-        width:'10vh',
-        height:'10vh',
+        width:'8vh',
+        height:'8vh',
         border:'black',
         borderStyle:'solid',
          };
