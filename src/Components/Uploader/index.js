@@ -6,7 +6,6 @@ const Uploader = ({setPgn,setTresholdValue}) => {
     const [treshold,setTreshold] = useState(5);
 
     const handleClick = () => {
-      console.log(treshold);
       setPgn(inputText)
       setTresholdValue(treshold)
     }
@@ -16,6 +15,8 @@ const Uploader = ({setPgn,setTresholdValue}) => {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop:'0.3vh',paddingTop:'40px',marginRight:'0.2vw'}}>
           <textarea
             value={inputText}
+            label="PGN Text"
+            placeholder='Enter PGN text'
             onChange={e => setInputText(e.target.value)}
             style={{
               width: '100%',
@@ -26,6 +27,7 @@ const Uploader = ({setPgn,setTresholdValue}) => {
             }}
           />
         </div>
+        Threshold : 
         <input 
           type="number" 
           value={treshold} 
