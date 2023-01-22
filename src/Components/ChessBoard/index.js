@@ -3,20 +3,23 @@ import { useEffect,useMemo,useCallback,useRef } from 'react';
 import {Chess} from 'chess.js';
 import { chessBoardStyles } from './style';
 
+import Piece from 'react-chess-pieces';
+
+
 
 const pieceImages = {
-  'p': '../../images/blackPawn.png',
-  'r': '../../images/blackRook.png',
-  'n': './../images/blackKnight.png',
-  'k': './../images/blackKing.png',
-  'q': './../images/blackQueen.png',
-  'b': './../images/blackBishop.png',
-  'P': './../images/whitePawn.png',
-  'R': './../images/whiteRook.png',
-  'N': './../images/whiteKnight.png',
-  'K': './../images/whiteKing.png',
-  'Q': './../images/whiteQueen.png',
-  'B': './../images/whiteBishop.png',
+  'p': 'https://upload.wikimedia.org/wikipedia/commons/c/cd/Chess_pdt60.png',
+  'r': 'https://upload.wikimedia.org/wikipedia/commons/a/a0/Chess_rdt60.png',
+  'n': 'https://upload.wikimedia.org/wikipedia/commons/f/f1/Chess_ndt60.png',
+  'k': 'https://upload.wikimedia.org/wikipedia/commons/e/e3/Chess_kdt60.png',
+  'q': 'https://upload.wikimedia.org/wikipedia/commons/a/af/Chess_qdt60.png',
+  'b': 'https://upload.wikimedia.org/wikipedia/commons/8/81/Chess_bdt60.png',
+  'P': 'https://upload.wikimedia.org/wikipedia/commons/0/04/Chess_plt60.png',
+  'R': 'https://upload.wikimedia.org/wikipedia/commons/5/5c/Chess_rlt60.png',
+  'N': 'https://upload.wikimedia.org/wikipedia/commons/2/28/Chess_nlt60.png',
+  'K': 'https://upload.wikimedia.org/wikipedia/commons/3/3b/Chess_klt60.png',
+  'Q': 'https://upload.wikimedia.org/wikipedia/commons/4/49/Chess_qlt60.png',
+  'B': 'https://upload.wikimedia.org/wikipedia/commons/9/9b/Chess_blt60.png',
 }
 
 const ChessBoard = (pgn) => {
