@@ -117,8 +117,6 @@ const ChessBoard = (pgn) => {
         return `Evaluations : ${parseFloat(evaluationString.match(regex)[0])}`;
     }
 
-    
- 
   return (
     <div css={chessBoardStyles} >
       <div>
