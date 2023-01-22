@@ -5,6 +5,10 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const script = document.createElement("script");
+script.src = "https://cdn.jsdelivr.net/npm/stockfish";
+script.async = true;
+document.body.appendChild(script);
 root.render(
   <React.StrictMode>
     <App />

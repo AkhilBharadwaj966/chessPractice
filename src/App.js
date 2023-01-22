@@ -1,23 +1,20 @@
-import logo from './logo.svg';
 import './App.css';
+import ChessBoard from './Components/ChessBoard';
+import Uploader from './Components/Uploader';
+import {useState} from 'react';
 
 function App() {
+  const [pgn,setPgn] = useState('');
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div style={{ display: 'flex' }}>
+        <div style={{ flex: '0.5' }}>
+          <ChessBoard pgn={pgn}/>
+        </div>
+        <div style={{ flex: '0.5' }}>
+          <Uploader setPgn={setPgn}/>
+        </div>
+    </div>
     </div>
   );
 }
